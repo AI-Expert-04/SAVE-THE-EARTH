@@ -40,9 +40,6 @@ public class TextSizeAnimation : MonoBehaviour
                 yield return null;
             }
 
-            // 크기가 maxSize에 도달한 후 잠시 멈춤
-            //yield return new WaitForSeconds(0.5f);
-
             timer = 0f;
 
             while (timer < duration)
