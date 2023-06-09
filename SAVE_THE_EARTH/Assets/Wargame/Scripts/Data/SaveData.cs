@@ -16,7 +16,7 @@ public class SaveData : MonoBehaviour
         string pwd = pwdInputField.text;
 
         // Check if ID already exists in the CSV file
-        string filePath = "/Users/han-seung-yeop/Space Lost/Assets/Wargame/Data/game_data.csv";
+        string filePath = "/Users/han-seung-yeop/Documents/GitHub/SAVE-THE-EARTH/SAVE_THE_EARTH/Assets/Wargame/Data/game_data.csv";
 
         if (!File.Exists(filePath))
         {

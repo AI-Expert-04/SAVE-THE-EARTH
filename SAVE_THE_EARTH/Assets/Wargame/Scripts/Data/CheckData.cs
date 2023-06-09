@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+
 public class CheckData : MonoBehaviour
 {
+    public static CheckData instance;
+    
     public TMP_InputField idInputField;
     public TMP_InputField pwdInputField;
 
@@ -14,25 +17,37 @@ public class CheckData : MonoBehaviour
         string pwd = pwdInputField.text;
 
         // game_data.csv 파일 경로
-        string gameDataFilePath = "/Users/han-seung-yeop/Space Lost/Assets/Wargame/Data/game_data.csv";
-        string FilePath = "/Users/han-seung-yeop/Space Lost/Assets/Wargame/Data/";
+        string gameDataFilePath = "/Users/han-seung-yeop/Documents/GitHub/SAVE-THE-EARTH/SAVE_THE_EARTH/Assets/Wargame/Data/game_data.csv";
+        string FilePath = "/Users/han-seung-yeop/Documents/GitHub/SAVE-THE-EARTH/SAVE_THE_EARTH/Assets/Wargame/Data/";
+        instance = this;
+
         // 입력된 ID와 PWD가 game_data.csv 파일의 ID/PWD와 일치하는지 확인
         if (CheckGameCredentials(id, pwd, gameDataFilePath))
         {
             Debug.Log("일치");
+
             // 현재 시간을 로그인 시간으로 저장
             string currentTime = System.DateTime.Now.ToString();
             string loginTimeData = string.Format("Login Time: {0}", currentTime);
 
-            // ID.CSV 파일 생성
+            // ID.CSV 파일 경로
             string userFilePath = Path.Combine(FilePath, id + ".csv");
 
             // ID.CSV 파일에 로그인 시간 저장
-            File.WriteAllText(userFilePath, loginTimeData + "\n");
+            if (!File.Exists(userFilePath))
+            {
+                File.WriteAllText(userFilePath, loginTimeData + "\n");
+                Debug.Log(userFilePath+"만듬");
+            }
+            else
+            {
+                File.AppendAllText(userFilePath, loginTimeData + "\n");
+                Debug.Log("데이터 추가");
+            }
 
             // 캐릭터 번호, 외계인 Kill, 운석 파괴 값을 저장할 공간 추가
-            string gameData = string.Format("Character: {0}, Alien Kills: {1}, Meteor Destroyed: {2}", 0, 0, 0);
-            File.AppendAllText(userFilePath, gameData + "\n");
+            // string gameData = string.Format("Character: {0}, Alien Kills: {1}, Meteor Destroyed: {2}", 0, 0, 0);
+            // File.AppendAllText(userFilePath, gameData + "\n");
         }
     }
 
