@@ -9,9 +9,7 @@ public class CamMove : MonoBehaviour
 
     private void Start()
     {
-        
         spaceshipTransform = GameObject.FindWithTag("Player").transform;
-        
     }
 
     private void LateUpdate()
