@@ -75,6 +75,7 @@ MonoBehaviour:
   playerHp: 100
   playerDmg: 10
   playerSpd: 10
+  term: 5
 --- !u!50 &-9142007290687758494
 Rigidbody2D:
   serializedVersion: 4

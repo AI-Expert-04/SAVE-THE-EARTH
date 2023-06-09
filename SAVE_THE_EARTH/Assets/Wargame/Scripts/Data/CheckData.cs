@@ -11,11 +11,17 @@ public class CheckData : MonoBehaviour
     public TMP_InputField idInputField;
     public TMP_InputField pwdInputField;
 
+    public int notlogin;
+
+    public void NOTLOGINS(){
+        instance = this;
+        notlogin = 1;
+    }
+
     public void SaveGameData()
     {
         string id = idInputField.text;
         string pwd = pwdInputField.text;
-
         // game_data.csv 파일 경로
         string gameDataFilePath = "/Users/han-seung-yeop/Documents/GitHub/SAVE-THE-EARTH/SAVE_THE_EARTH/Assets/Wargame/Data/game_data.csv";
         string FilePath = "/Users/han-seung-yeop/Documents/GitHub/SAVE-THE-EARTH/SAVE_THE_EARTH/Assets/Wargame/Data/";
@@ -44,10 +50,6 @@ public class CheckData : MonoBehaviour
                 File.AppendAllText(userFilePath, loginTimeData + "\n");
                 Debug.Log("데이터 추가");
             }
-
-            // 캐릭터 번호, 외계인 Kill, 운석 파괴 값을 저장할 공간 추가
-            // string gameData = string.Format("Character: {0}, Alien Kills: {1}, Meteor Destroyed: {2}", 0, 0, 0);
-            // File.AppendAllText(userFilePath, gameData + "\n");
         }
     }
 
