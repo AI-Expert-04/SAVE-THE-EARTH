@@ -53,9 +53,6 @@ public class TextSizeAnimation : MonoBehaviour
                 timer += Time.deltaTime;
                 yield return null;
             }
-
-            // 크기가 minSize에 도달한 후 잠시 멈춤
-            //yield return new WaitForSeconds(0.5f);
         }
     }
 }
