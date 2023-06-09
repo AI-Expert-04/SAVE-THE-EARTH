@@ -13,9 +13,9 @@ public class Create : MonoBehaviour
     Kkuing player;
     private void Start()
     {
-        // 시작 시간에 바로 운석 생성
+        // 시작 시간에 바로 운석 & 외계인 생성
         SpawnMeteor();
-        player=Kkuing.instance;
+        player = Kkuing.instance;
 
         StartCoroutine(SpawnMeteorCoroutine()); // 일정 간격으로 운석 생성 코루틴 실행
 
