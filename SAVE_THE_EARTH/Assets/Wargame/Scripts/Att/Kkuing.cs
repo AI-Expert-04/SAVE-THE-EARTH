@@ -1,11 +1,12 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-public class Kkuing : MonoBehaviour
-{
+
+public class Kkuing : MonoBehaviour{
     public static Kkuing instance; // 인스턴트
     public Image damageImage; // 피 효과
     public Slider healthSlider; // HP 슬라이더
@@ -21,25 +22,21 @@ public class Kkuing : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private void Awake()
-    {
+    private void Awake(){
         instance = this;
     }
-
-    private void Start()
-    {
+    private void Start(){
         rb = GetComponent<Rigidbody2D>();
-
-        // Player HealthUI 게임 오브젝트를 생성합니다.
+        // Player HealthUI 게임 오브젝트를 생성
         GameObject HealthUI = new GameObject("HealthUI");
 
-        // HealthUI 게임 오브젝트를 Canvas의 자식으로 설정합니다.
+        // HealthUI 게임 오브젝트를 Canvas의 자식으로 설정
         HealthUI.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
-        // Image 컴포넌트를 생성하여 HealthUI의 자식으로 추가합니다.
+        // Image 컴포넌트를 생성하여 HealthUI의 자식으로 추가
         Image damageImages = Instantiate(damageImage, HealthUI.transform);
 
-        // Slider 컴포넌트를 생성하여 HealthUI의 자식으로 추가합니다.
+        // Slider 컴포넌트를 생성하여 HealthUI의 자식으로 추가
         Slider healthSliders = Instantiate(healthSlider, HealthUI.transform);
 
         TextMeshProUGUI TextTimes = Instantiate(TextTime, HealthUI.transform);
@@ -48,8 +45,7 @@ public class Kkuing : MonoBehaviour
         healthSlider.value = playerHp;
     }
 
-    private void Update()
-    {
+    private void Update(){
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
@@ -65,6 +61,7 @@ public class Kkuing : MonoBehaviour
         TextTime.text = "Time: " + term;
         if(term <= 0f) End();
     }
+    
     void LateUpdate(){
         // 운석 리스트
         GameObject[] meteorites = GameObject.FindGameObjectsWithTag("Asteroid");
@@ -79,48 +76,40 @@ public class Kkuing : MonoBehaviour
         GameObject closestObject = null;
 
         // 운석 중 가장 가까운 오브젝트 탐색
-        foreach (GameObject meteorite in meteorites)
-        {
+        foreach (GameObject meteorite in meteorites){
             float distance = Vector2.Distance(transform.position, meteorite.transform.position);
 
-            if (distance < closestDistance)
-            {
+            if (distance < closestDistance){
                 closestDistance = distance;
                 closestObject = meteorite;
             }
         }
 
         // 운석 중 가장 가까운 오브젝트 탐색
-        foreach (GameObject meteorite2 in meteorites2)
-        {
+        foreach (GameObject meteorite2 in meteorites2){
             float distance = Vector2.Distance(transform.position, meteorite2.transform.position);
 
-            if (distance < closestDistance)
-            {
+            if (distance < closestDistance) {
                 closestDistance = distance;
                 closestObject = meteorite2;
             }
         }
 
         // 에일리언 중 가장 가까운 오브젝트 탐색
-        foreach (GameObject alien in aliens)
-        {
+        foreach (GameObject alien in aliens){
             float distance = Vector2.Distance(transform.position, alien.transform.position);
 
-            if (distance < closestDistance)
-            {
+            if (distance < closestDistance){
                 closestDistance = distance;
                 closestObject = alien;
             }
         }
 
         // 에일리언 중 가장 가까운 오브젝트 탐색
-        foreach (GameObject alien2 in aliens2)
-        {
+        foreach (GameObject alien2 in aliens2){
             float distance = Vector2.Distance(transform.position, alien2.transform.position);
 
-            if (distance < closestDistance)
-            {
+            if (distance < closestDistance){
                 closestDistance = distance;
                 closestObject = alien2;
             }
@@ -134,8 +123,7 @@ public class Kkuing : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
         }
     } 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
+    private void OnCollisionEnter2D(Collision2D collision){
         if (collision.gameObject.CompareTag("Asteroid")){
             Destroy(collision.gameObject);
             TakeDamage(asteroidDmg);
@@ -149,8 +137,7 @@ public class Kkuing : MonoBehaviour
         }
     }
 
-    private void ActivateDamageImage()
-    {
+    private void ActivateDamageImage(){
         Image damageImage = GameObject.Find("Damge(Clone)").GetComponent<Image>();
     
         if (damageImage != null){
@@ -159,28 +146,46 @@ public class Kkuing : MonoBehaviour
         }
     }
 
-    private IEnumerator DelayedDisableDamageImage() // 코루틴
-    {
+    private IEnumerator DelayedDisableDamageImage(){ // 코루틴
         Image damageImage = GameObject.Find("Damge(Clone)").GetComponent<Image>();
         yield return new WaitForSeconds(0.5f);
 
         damageImage.color = new Color(0f, 0f, 0f, 0f);
     }
 
-    private void TakeDamage(int damageAmount)
-    {
+    private void TakeDamage(int damageAmount){
         playerHp -= damageAmount;
         Slider loadedHealthSlider = GameObject.Find("HealthSlider(Clone)").GetComponent<Slider>();
 
         if (playerHp <= 0){
+            DataSave();
             SceneManager.LoadScene("Die");
-            if (loadedHealthSlider != null) loadedHealthSlider.value = 100; // 로드된 씬에서 healthSlider를 찾아 값을 설정합니다.
+            if (loadedHealthSlider != null) loadedHealthSlider.value = 100; // 로드된 씬에서 healthSlider를 찾아 값을 설정
         }
         else loadedHealthSlider.value = playerHp;
     }
 
     private void End(){
-        // Instantiate()
+        DataSave();
         SceneManager.LoadScene("Ending");
+    }
+
+    private void DataSave(){;
+        int num = CheckData.instance.notlogin;
+
+        if (num != 1){
+            string id = CheckData.instance.idInputField.text;
+            // UserData 파일 경로
+            string filePath = Path.Combine(Application.dataPath, "Wargame/Data/");
+            string userFilePath = Path.Combine(filePath, id + ".csv");
+            string gameData = string.Format("{0}, {1}, {2}", 
+                CharacterSelector.instance.characterNum, 
+                KillCounter.instance.ailenKill,
+                KillCounter.instance.meteorKill);
+                
+            File.AppendAllText(userFilePath, gameData + "\n");
+            Debug.Log("저장");
+        }
+        else Debug.Log("저장할 데이터 없음");
     }
 }
